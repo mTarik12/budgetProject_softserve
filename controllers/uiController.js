@@ -74,6 +74,7 @@ var addListItem = function (obj, type) {
 };
 
 // UI CONTROLLER
+
 var UIController = {
 
     getInput: function () {
@@ -189,3 +190,5 @@ var UIController = {
     },
 
 };
+
+export { UIController };

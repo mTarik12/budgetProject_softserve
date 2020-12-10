@@ -1,3 +1,8 @@
+import { budgetController } from './controllers/budgetController';
+import { UIController } from './controllers/UIController';
+import { globalController } from './controllers/globalController';
+
+
 var BUDGET_LOCAL_STORAGE_KEY = 'budget';
 
 console.log('Application has started.');

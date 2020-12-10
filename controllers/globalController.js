@@ -1,3 +1,6 @@
+import { budgetController } from './budgetController';
+import { UIController } from './uiController';
+
 var globalController = {
 
     ctrlAddItem: function () {
@@ -75,3 +78,5 @@ var globalController = {
 
     }
 }
+
+export { globalController };
