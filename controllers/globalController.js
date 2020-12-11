@@ -15,10 +15,6 @@ var globalController = {
             // 5. Calculate and update budget
             budgetController.calculateBudget(budget);
 
-            // saved budget
-
-            budgetController.saveBudget(budget);
-
             // TODO remove calculatePercentages & getPercentages
             // 6. Calculate and update percentages
             budgetController.calculatePercentages(budget);
@@ -35,7 +31,8 @@ var globalController = {
             // 3. Add the item to the UI
             UIController.addListItem(newItem, input.type);
 
-
+            // saved budget
+            budgetController.saveBudget(budget);
         }
     },
 
