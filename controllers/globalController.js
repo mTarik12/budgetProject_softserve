@@ -1,5 +1,5 @@
-import { budgetController } from './budgetController';
-import { UIController } from './uiController';
+// import { budgetController } from './budgetController';
+// import { UIController } from './uiController';
 
 var globalController = {
 
@@ -14,6 +14,10 @@ var globalController = {
 
             // 5. Calculate and update budget
             budgetController.calculateBudget(budget);
+
+            // saved budget
+
+            budgetController.saveBudget(budget);
 
             // TODO remove calculatePercentages & getPercentages
             // 6. Calculate and update percentages
@@ -79,4 +83,4 @@ var globalController = {
     }
 }
 
-export { globalController };
+// export { globalController };
