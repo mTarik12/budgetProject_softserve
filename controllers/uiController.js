@@ -1,4 +1,4 @@
-var DOMstrings = {
+const DOMstrings = {
     inputType: '.add__type',
     inputDescription: '.add__description',
     inputValue: '.add__value',
@@ -15,48 +15,41 @@ var DOMstrings = {
 };
 
 
-var formatNumber = function (num, type) {
-    var numSplit, int, dec, type;
-    /*
-        + or - before number
-        exactly 2 decimal points
-        comma separating the thousands
-
-        2310.4567 -> + 2,310.46
-        2000 -> + 2,000.00
-        */
+formatNumber = (num, type) => {
 
     num = Math.abs(num);
     num = num.toFixed(2);
 
-    numSplit = num.split('.');
+    const numSplit = num.split('.');
 
-    int = numSplit[0];
+    let int = numSplit[0];
+
     if (int.length > 3) {
         int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3); //input 23510, output 23,510
     }
 
-    dec = numSplit[1];
+    const dec = numSplit[1];
 
-    return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
-
+    return `${(type === 'exp' ? '-' : '+')} ${int}.${dec}`;
 };
 
 
-var nodeListForEach = function (list, callback) {
-    for (var i = 0; i < list.length; i++) {
+nodeListForEach = (list, callback) => {
+
+    for (let i = 0; i < list.length; i++) {
         callback(list[i], i);
     }
 };
 
-var addListItem = function (obj, type) {
-    var html, newHtml, element;
-    // Create HTML string with placeholder text
+addListItem = (obj, type) => {
+    let html, newHtml, element;
 
+    // Create HTML string with placeholder text
     if (type === 'inc') {
         element = DOMstrings.incomeContainer;
 
         html = '<div class="item clearfix" id="inc-%id%"> <div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+
     } else if (type === 'exp') {
         element = DOMstrings.expensesContainer;
 
@@ -75,9 +68,9 @@ var addListItem = function (obj, type) {
 
 // UI CONTROLLER
 
-var UIController = {
+const UIController = {
 
-    getInput: function () {
+    getInput: () => {
         return {
             type: document.querySelector(DOMstrings.inputType).value, // Will be either inc or exp
             description: document.querySelector(DOMstrings.inputDescription).value,
@@ -88,34 +81,30 @@ var UIController = {
 
     addListItem,
 
-    displayItemsList: function (allItems) {
+    displayItemsList: (allItems) => {
 
-        allItems.exp.forEach(function (expItem) {
+        allItems.exp.forEach((expItem) => {
             addListItem(expItem, 'exp');
         });
 
-        allItems.inc.forEach(function (incItem) {
+        allItems.inc.forEach((incItem) => {
             addListItem(incItem, 'inc');
         });
     },
 
 
-    deleteListItem: function (selectorID) {
+    deleteListItem: (selectorID) => {
 
-        var el = document.getElementById(selectorID);
+        const el = document.getElementById(selectorID);
         el.parentNode.removeChild(el);
-
     },
 
+    clearFields: () => {
+        const fields = document.querySelectorAll(`${DOMstrings.inputDescription}, ${DOMstrings.inputValue}`);
 
-    clearFields: function () {
-        var fields, fieldsArr;
+        const fieldsArr = Array.from(fields);
 
-        fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
-
-        fieldsArr = Array.prototype.slice.call(fields);
-
-        fieldsArr.forEach(function (current, index, array) {
+        fieldsArr.forEach((current, index, array) => {
             current.value = "";
         });
 
@@ -123,61 +112,50 @@ var UIController = {
     },
 
 
-    displayBudget: function (budget) {
-        var type;
+    displayBudget: (budget) => {
+        let type;
         budget.budget > 0 ? type = 'inc' : type = 'exp';
 
         document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(budget.budget, type);
         document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(budget.totals.inc, 'inc');
         document.querySelector(DOMstrings.expensesLabel).textContent = formatNumber(budget.totals.exp, 'exp');
 
-        if (budget.percentage > 0) {
-            document.querySelector(DOMstrings.percentageLabel).textContent = budget.percentage + '%';
+        if (budget.percentage >= 0) {
+            document.querySelector(DOMstrings.percentageLabel).textContent = `${budget.percentage}%`;
         } else {
             document.querySelector(DOMstrings.percentageLabel).textContent = '---';
         }
-
     },
 
+    displayPercentages: (percentages) => {
 
-    displayPercentages: function (percentages) {
+        const fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
 
-        var fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
-
-        nodeListForEach(fields, function (current, index) {
+        nodeListForEach(fields, (current, index) => {
 
             if (percentages[index] > 0) {
-                current.textContent = percentages[index] + '%';
+                current.textContent = `${percentages[index]}%`;
             } else {
                 current.textContent = '---';
             }
         });
-
     },
 
+    displayMonth: () => {
+        const now = new Date();
 
-    displayMonth: function () {
-        var now, months, month, year;
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const month = now.getMonth();
 
-        now = new Date();
-        //var christmas = new Date(2016, 11, 25);
-
-        months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        month = now.getMonth();
-
-        year = now.getFullYear();
-        document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' + year;
+        const year = now.getFullYear();
+        document.querySelector(DOMstrings.dateLabel).textContent = `${months[month]} ${year}`;
     },
 
+    changedType: () => {
 
-    changedType: function () {
+        const fields = document.querySelectorAll(`${DOMstrings.inputType}, ${DOMstrings.inputDescription}, ${DOMstrings.inputValue}`);
 
-        var fields = document.querySelectorAll(
-            DOMstrings.inputType + ',' +
-            DOMstrings.inputDescription + ',' +
-            DOMstrings.inputValue);
-
-        nodeListForEach(fields, function (cur) {
+        nodeListForEach(fields, (cur) => {
             cur.classList.toggle('red-focus');
         });
 
@@ -185,10 +163,7 @@ var UIController = {
 
     },
 
-    getDOMstrings: function () {
+    getDOMstrings: () => {
         return DOMstrings;
     },
-
 };
-
-// export { UIController };

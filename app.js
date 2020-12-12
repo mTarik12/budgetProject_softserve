@@ -1,16 +1,11 @@
-// import { budgetController } from './controllers/budgetController';
-// import { UIController } from './controllers/UIController';
-// import { globalController } from './controllers/globalController';
-
-
-var BUDGET_LOCAL_STORAGE_KEY = 'budget';
+const BUDGET_LOCAL_STORAGE_KEY = 'budget';
 
 console.log('Application has started.');
 UIController.displayMonth();
 
-var budget = budgetController.getBudget(BUDGET_LOCAL_STORAGE_KEY);
+let budget = budgetController.getBudget(BUDGET_LOCAL_STORAGE_KEY);
 
-// local storage does not contain budget
+// If local storage does not contain budget
 if (!budget) {
     localStorage.setItem(BUDGET_LOCAL_STORAGE_KEY, JSON.stringify(budgetController.getInitialBudget()));
     budget = budgetController.getInitialBudget();
@@ -21,16 +16,13 @@ UIController.displayBudget(budget);
 UIController.displayItemsList(budget.allItems);
 
 
-setupEventListeners();
-
-
-function setupEventListeners() {
-    var DOM = UIController.getDOMstrings();
+const setupEventListeners = () => {
+    const DOM = UIController.getDOMstrings();
 
     document.querySelector(DOM.inputBtn).addEventListener('click', globalController.ctrlAddItem);
 
-    document.addEventListener('keypress', function (event) {
-        if (event.keyCode === 13 || event.which === 13) {
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'Enter') {
             globalController.ctrlAddItem();
         }
     });
@@ -39,3 +31,4 @@ function setupEventListeners() {
 
     document.querySelector(DOM.inputType).addEventListener('change', UIController.changedType);
 };
+setupEventListeners();

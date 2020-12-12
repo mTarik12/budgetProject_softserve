@@ -1,34 +1,33 @@
-var Expense = function (id, description, value) {
-    this.id = id;
-    this.description = description;
-    this.value = value;
-    this.percentage = -1;
-};
-
-
-Expense.prototype.calcPercentage = function (totalIncome) {
-    if (totalIncome > 0) {
-        this.percentage = Math.round((this.value / totalIncome) * 100);
-    } else {
+class Expense {
+    constructor(id, description, value) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
         this.percentage = -1;
-    };
-    return this.percentage;
+    }
+    calcPercentage(totalIncome) {
+        if (totalIncome > 0) {
+            this.percentage = Math.round((this.value / totalIncome) * 100);
+        } else {
+            this.percentage = -1;
+        };
+        return this.percentage;
+    }
 };
 
-var calculateTotal = function (budget, type) {
-    var sum = 0;
-    budget.allItems[type].forEach(function (cur) {
+calculateTotal = (budget, type) => {
+    let sum = 0;
+    budget.allItems[type].forEach((cur) => {
         sum += cur.value;
     });
     budget.totals[type] = sum;
 };
 
-
-var budgetController = {
+const budgetController = {
 
     addItem: function (type, des, val) {
-        var ID;
-        var budget = this.getBudget();
+        let ID;
+        let budget = this.getBudget();
 
         //[1 2 3 4 5], next ID = 6
         //[1 2 4 6 8], next ID = 9
@@ -43,40 +42,31 @@ var budgetController = {
         const newItem = { id: ID, description: des, value: val }
         // Push it into our data structure
         budget.allItems[type].push(newItem);
-
-        //this.saveBudget(budget);
-
         // Return the new element
         return { newItem, budget };
     },
 
-
     deleteItem: function (type, id) {
-        var ids, index;
-
         // id = 6
         //data.allItems[type][id];
         // ids = [1 2 4  8]
         //index = 3
 
-        var budget = this.getBudget();
+        let budget = this.getBudget();
 
-        ids = budget.allItems[type].map(function (current) {
+        const ids = budget.allItems[type].map((current) => {
             return current.id;
         });
 
-        index = ids.indexOf(id);
+        const index = ids.indexOf(id);
 
         if (index !== -1) {
             budget.allItems[type].splice(index, 1);
         };
         return budget;
-
-
     },
 
-
-    calculateBudget: function (budget) {
+    calculateBudget: (budget) => {
 
         // calculate total income and expenses
         calculateTotal(budget, 'exp');
@@ -92,32 +82,29 @@ var budgetController = {
         } else {
             budget.percentage = -1;
         }
-
         // Expense = 100 and income 300, spent 33.333% = 100/300 = 0.3333 * 100
         return budget;
     },
 
-    calculatePercentages: function (budget) {
+    calculatePercentages: (budget) => {
 
-        budget.allItems.exp.forEach(function (expense) {
-            var expenseObject = new Expense(expense.id, expense.description, expense.value);
+        budget.allItems.exp.forEach((expense) => {
+            const expenseObject = new Expense(expense.id, expense.description, expense.value);
             expense.percentage = expenseObject.calcPercentage(budget.totals.inc);
         });
     },
 
-
     getPercentages: function (budget) {
 
-        return budget.allItems.exp.map(function (expense) {
+        return budget.allItems.exp.map((expense) => {
             return expense.percentage;
         })
     },
 
-
     // TODO get and save to db Controller
     getBudget: function () {
-        var budget = localStorage.getItem(BUDGET_LOCAL_STORAGE_KEY);
-        console.log(budget);
+        let budget = localStorage.getItem(BUDGET_LOCAL_STORAGE_KEY);
+        // console.log(budget);
         if (budget) {
             return JSON.parse(budget);
         } else {
@@ -126,11 +113,11 @@ var budgetController = {
         };
     },
 
-    saveBudget: function (budget) {
+    saveBudget: (budget) => {
         localStorage.setItem(BUDGET_LOCAL_STORAGE_KEY, JSON.stringify(budget));
     },
 
-    getInitialBudget: function () {
+    getInitialBudget: () => {
         return {
             allItems: {
                 exp: [],
@@ -145,7 +132,4 @@ var budgetController = {
 
         };
     },
-
 };
-
-// export { budgetController };
