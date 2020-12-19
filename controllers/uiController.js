@@ -114,9 +114,9 @@ const UIController = {
 
     displayBudget: (budget) => {
         let type;
-        budget.budget > 0 ? type = 'inc' : type = 'exp';
+        budget.grossTotal > 0 ? type = 'inc' : type = 'exp';
 
-        document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(budget.budget, type);
+        document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(budget.grossTotal, type);
         document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(budget.totals.inc, 'inc');
         document.querySelector(DOMstrings.expensesLabel).textContent = formatNumber(budget.totals.exp, 'exp');
 

@@ -23,98 +23,94 @@ const calculateTotal = (budget, type) => {
     budget.totals[type] = sum;
 };
 
+const addItem = (budget, type, des, val) => {
+    let ID;
+
+    // Create new ID
+    if (budget.allItems[type].length > 0) {
+        ID = budget.allItems[type][budget.allItems[type].length - 1].id + 1;
+    } else {
+        ID = 0;
+    }
+    const newItem = { id: ID, description: des, value: val }
+    // Push it into our data structure
+    budget.allItems[type].push(newItem);
+    // Return the new element
+    return { newItem, budget };
+};
+
+const calculateBudget = (budget) => {
+
+    // calculate total income and expenses
+    calculateTotal(budget, 'exp');
+    calculateTotal(budget, 'inc');
+
+    // Calculate the budget: income - expenses
+    budget.grossTotal = budget.totals.inc - budget.totals.exp;
+
+    // calculate the percentage of income that we spent
+    if (budget.totals.inc > 0) {
+        budget.percentage = Math.round((budget.totals.exp / budget.totals.inc) * 100);
+    } else {
+        budget.percentage = -1;
+    }
+    // Expense = 100 and income 300, spent 33.333% = 100/300 = 0.3333 * 100
+    return budget;
+};
+
+const calculatePercentages = (budget) => {
+
+    budget.allItems.exp.forEach((expense) => {
+        const expenseObject = new Expense(expense.id, expense.description, expense.value);
+        expense.percentage = expenseObject.calcPercentage(budget.totals.inc);
+    });
+
+    return {
+        budget,
+        percentages: budget.allItems.exp.map((expense) => {
+            return expense.percentage;
+        })
+    }
+};
+
+const deleteItem = (budget, type, id) => {
+
+    const ids = budget.allItems[type].map((current) => {
+        return current.id;
+    });
+
+    const index = ids.indexOf(id);
+
+    if (index !== -1) {
+        budget.allItems[type].splice(index, 1);
+    };
+    return budget;
+};
+
 const budgetController = {
 
-    addItem: function (type, des, val) {
-        let ID;
-        let budget = this.getBudget();
+    addItem: function (type, description, value) {
 
-        //[1 2 3 4 5], next ID = 6
-        //[1 2 4 6 8], next ID = 9
-        // ID = last ID + 1
+        const initialBudget = dbController.getBudget();
 
-        // Create new ID
-        if (budget.allItems[type].length > 0) {
-            ID = budget.allItems[type][budget.allItems[type].length - 1].id + 1;
-        } else {
-            ID = 0;
-        }
-        const newItem = { id: ID, description: des, value: val }
-        // Push it into our data structure
-        budget.allItems[type].push(newItem);
-        // Return the new element
-        return { newItem, budget };
+        let { newItem, budget } = addItem(initialBudget, type, description, value);
+
+        // 3. Calculate and update budget
+        budget = calculateBudget(budget);
+
+        return { newItem, ...calculatePercentages(budget) };
     },
 
     deleteItem: function (type, id) {
-        // id = 6
-        //data.allItems[type][id];
-        // ids = [1 2 4  8]
-        //index = 3
 
-        let budget = this.getBudget();
+        const initialBudget = dbController.getBudget();
 
-        const ids = budget.allItems[type].map((current) => {
-            return current.id;
-        });
+        let budget = deleteItem(initialBudget, type, id);
 
-        const index = ids.indexOf(id);
+        // 2. Calculate and update budget
+        budget = calculateBudget(budget);
 
-        if (index !== -1) {
-            budget.allItems[type].splice(index, 1);
-        };
-        return budget;
-    },
-
-    calculateBudget: (budget) => {
-
-        // calculate total income and expenses
-        calculateTotal(budget, 'exp');
-        calculateTotal(budget, 'inc');
-
-        // Calculate the budget: income - expenses
-        // TODO fix budget.budget -> grossTotal
-        budget.budget = budget.totals.inc - budget.totals.exp;
-
-        // calculate the percentage of income that we spent
-        if (budget.totals.inc > 0) {
-            budget.percentage = Math.round((budget.totals.exp / budget.totals.inc) * 100);
-        } else {
-            budget.percentage = -1;
-        }
-        // Expense = 100 and income 300, spent 33.333% = 100/300 = 0.3333 * 100
-        return budget;
-    },
-
-    calculatePercentages: (budget) => {
-
-        budget.allItems.exp.forEach((expense) => {
-            const expenseObject = new Expense(expense.id, expense.description, expense.value);
-            expense.percentage = expenseObject.calcPercentage(budget.totals.inc);
-        });
-    },
-
-    getPercentages: function (budget) {
-
-        return budget.allItems.exp.map((expense) => {
-            return expense.percentage;
-        })
-    },
-
-    // TODO get and save to db Controller
-    getBudget: function () {
-        let budget = localStorage.getItem(BUDGET_LOCAL_STORAGE_KEY);
-        // console.log(budget);
-        if (budget) {
-            return JSON.parse(budget);
-        } else {
-            //throw new Error('No budget on local storage');
-            return false;
-        };
-    },
-
-    saveBudget: (budget) => {
-        localStorage.setItem(BUDGET_LOCAL_STORAGE_KEY, JSON.stringify(budget));
+        return {...calculatePercentages(budget)};
     },
 
     getInitialBudget: () => {
@@ -127,9 +123,8 @@ const budgetController = {
                 exp: 0,
                 inc: 0
             },
-            budget: 0,
+            grossTotal: 0,
             percentage: -1,
-
         };
     },
 };

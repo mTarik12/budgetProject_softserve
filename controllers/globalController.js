@@ -7,18 +7,9 @@ const globalController = {
 
         if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
 
-            // 2. Add the item to the budget controller
-            let { newItem, budget } = budgetController.addItem(input.type, input.description, input.value);
+            let { newItem, budget, percentages } =
+                budgetController.addItem(input.type, input.description, input.value);
 
-            // 3. Calculate and update budget
-            budgetController.calculateBudget(budget);
-
-            // TODO remove calculatePercentages & getPercentages
-            // 4. Calculate and update percentages
-            budgetController.calculatePercentages(budget);
-
-            // 5. Read percentages from the budget controller
-            const percentages = budgetController.getPercentages(budget);
 
             // 6. Update the UI with the new percentages
             UIController.displayPercentages(percentages);
@@ -30,13 +21,13 @@ const globalController = {
             UIController.addListItem(newItem, input.type);
 
             // 9.save budget
-            budgetController.saveBudget(budget);
+            dbController.saveBudget(budget);
         }
     },
 
 
     ctrlDeleteItem: (event) => {
-        
+
         const itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
 
         if (itemID) {
@@ -47,23 +38,13 @@ const globalController = {
             const ID = parseInt(splitID[1]);
 
             // 1. delete the item from the data structure
-            const newBudget = budgetController.deleteItem(type, ID);
-
-            // 2. Calculate and update budget
-            budgetController.calculateBudget(newBudget);
-
-            // TODO remove calculatePercentages & getPercentages
-            // 3. Calculate and update percentages
-            budgetController.calculatePercentages(newBudget);
-
-            // 4. Read percentages from the budget controller
-            const percentages = budgetController.getPercentages(newBudget);
+            const {budget,percentages} = budgetController.deleteItem(type, ID);
 
             // 5. Update the UI with the new percentages
             UIController.displayPercentages(percentages);
 
             // 6. Display the budget on the UI
-            UIController.displayBudget(newBudget);
+            UIController.displayBudget(budget);
 
             // 7. Delete the item from the UI
             UIController.deleteListItem(itemID);
@@ -72,7 +53,7 @@ const globalController = {
             UIController.clearFields();
 
             // 9. save new recalculated budget
-            budgetController.saveBudget(newBudget);
+            dbController.saveBudget(budget);
         }
     }
 };

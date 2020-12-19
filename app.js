@@ -3,7 +3,7 @@ const BUDGET_LOCAL_STORAGE_KEY = 'budget';
 console.log('Application has started.');
 UIController.displayMonth();
 
-let budget = budgetController.getBudget(BUDGET_LOCAL_STORAGE_KEY);
+let budget = dbController.getBudget(BUDGET_LOCAL_STORAGE_KEY);
 
 // If local storage does not contain budget
 if (!budget) {
