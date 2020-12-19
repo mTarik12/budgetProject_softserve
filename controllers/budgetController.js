@@ -15,7 +15,7 @@ class Expense {
     }
 };
 
-calculateTotal = (budget, type) => {
+const calculateTotal = (budget, type) => {
     let sum = 0;
     budget.allItems[type].forEach((cur) => {
         sum += cur.value;

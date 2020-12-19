@@ -15,7 +15,7 @@ const DOMstrings = {
 };
 
 
-formatNumber = (num, type) => {
+const formatNumber = (num, type) => {
 
     num = Math.abs(num);
     num = num.toFixed(2);
@@ -34,14 +34,14 @@ formatNumber = (num, type) => {
 };
 
 
-nodeListForEach = (list, callback) => {
+const nodeListForEach = (list, callback) => {
 
     for (let i = 0; i < list.length; i++) {
         callback(list[i], i);
     }
 };
 
-addListItem = (obj, type) => {
+const addListItem = (obj, type) => {
     let html, newHtml, element;
 
     // Create HTML string with placeholder text
