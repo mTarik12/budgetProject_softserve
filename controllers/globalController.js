@@ -7,16 +7,11 @@ const globalController = {
 
         // checkInput(input)
         if (!input.description.trim() || isNaN(input.value) || input.value < 0) {
-           return alert('Description or value is not valid');
+            return alert('Description or value is not valid');
         };
 
         let { newItem, budget, percentages } =
             budgetController.addItem(input.type, input.description, input.value);
-
-
-        // 6. Update the UI with the new percentages
-        UIController.displayPercentages(percentages);
-
         // 7. Display the budget on the UI
         UIController.displayBudget(budget);
 
