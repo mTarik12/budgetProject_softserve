@@ -20,18 +20,18 @@ const formatNumber = (num, type) => {
     num = Math.abs(num);
     num = num.toFixed(2);
 
-    const numSplit = num.split('.');
+    if (num.length > 3) {
+        num = numberWithSpaces(num);
+    };
 
-    let int = numSplit[0];
-
-    if (int.length > 3) {
-        int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3); //input 23510, output 23,510
-    }
-
-    const dec = numSplit[1];
-
-    return `${(type === 'exp' ? '-' : '+')} ${int}.${dec}`;
+    return `${(type === 'exp' ? '-' : '')} ${num}`;
 };
+
+const numberWithSpaces = (x) => {
+    let parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return parts.join(".");
+}
 
 
 const nodeListForEach = (list, callback) => {
@@ -54,6 +54,8 @@ const addListItem = (obj, type) => {
         element = DOMstrings.expensesContainer;
 
         html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">%percentage%%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+
+        obj.percentage < 1 && (obj.percentage = '<1')
     }
 
     // Replace the placeholder text with some actual data
@@ -114,31 +116,19 @@ const UIController = {
 
     displayBudget: (budget) => {
         let type;
-        budget.grossTotal > 0 ? type = 'inc' : type = 'exp';
+        budget.grossTotal < 0 && (type = 'exp');
 
         document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(budget.grossTotal, type);
         document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(budget.totals.inc, 'inc');
         document.querySelector(DOMstrings.expensesLabel).textContent = formatNumber(budget.totals.exp, 'exp');
 
-        if (budget.percentage >= 0) {
+        if (budget.percentage >= 1) {
             document.querySelector(DOMstrings.percentageLabel).textContent = `${budget.percentage}%`;
+        } else if (budget.percentage < 1) {
+            document.querySelector(DOMstrings.percentageLabel).textContent = `<1%`;
         } else {
             document.querySelector(DOMstrings.percentageLabel).textContent = '---';
         }
-    },
-
-    displayPercentages: (percentages) => {
-
-        const fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
-
-        nodeListForEach(fields, (current, index) => {
-
-            if (percentages[index] > 0) {
-                current.textContent = `${percentages[index]}%`;
-            } else {
-                current.textContent = '---';
-            }
-        });
     },
 
     displayMonth: () => {

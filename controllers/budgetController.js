@@ -91,6 +91,8 @@ const budgetController = {
 
     addItem: function (type, description, value) {
 
+        value = parseFloat(parseFloat(value).toFixed(2));
+
         const initialBudget = dbController.getBudget();
 
         let { newItem, budget } = addItem(initialBudget, type, description, value);

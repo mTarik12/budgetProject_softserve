@@ -43,15 +43,17 @@ body {
       rgba(21, 76, 139, 0.35),
       rgba(0, 0, 0, 0.35)
     ),
-    url(back2_2.png);
+    url(KOLOM.png);
   background-size: cover;
   background-position: center;
   position: relative;
 }
 
 .budget {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   position: absolute;
-  width: 350px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -74,8 +76,9 @@ body {
   font-weight: 300;
   font-size: 70px;
   text-align: center;
-  margin-bottom: 25px;
+  margin: auto;
   letter-spacing: 2px;
+  width: max-content;
 }
 
 .budget__income,
@@ -83,6 +86,8 @@ body {
   padding: 12px;
   text-transform: uppercase;
   font-size: 20px;
+  width: 420px;
+  margin: auto;
 }
 
 .budget__income {
@@ -141,7 +146,6 @@ body {
 }
 
 .add__type {
-  width: 55px;
   border: 1px solid #e7e7e7;
   height: 44px;
   font-size: 18px;
