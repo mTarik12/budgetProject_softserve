@@ -6,11 +6,11 @@ To use this app, please download the code and start with launching **index.html*
 
 If I had more time I would:
 
-- Put budget app on the server
-- Connect to the DB
-- Rewrite using React.js
+- Implement client server architecture
+- Use db as a persistent data storage (mongoDB)
+- Refactor using React.js
 - Adapt for mobile version using React Native
-- Put budget app on the docker with all its environment
+- Wrap server in docker container
 - Unit tests
 - Enhance look&feel of the app
 
