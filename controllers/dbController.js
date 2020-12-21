@@ -1,5 +1,7 @@
+// dbController is database of budget application
+
 const dbController = {
-     getBudget: function () {
+    getBudget: function () {
         let budget = localStorage.getItem(BUDGET_LOCAL_STORAGE_KEY);
         // console.log(budget);
         if (budget) {

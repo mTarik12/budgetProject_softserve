@@ -1,6 +1,9 @@
+// app is the starting point of a budget application that initiates budget and configures event listeners
+
 const BUDGET_LOCAL_STORAGE_KEY = "budget";
 
 console.log("Application has started.");
+
 UIController.displayMonth();
 
 let budget = dbController.getBudget(BUDGET_LOCAL_STORAGE_KEY);
@@ -15,6 +18,7 @@ if (!budget) {
 }
 
 UIController.displayBudget(budget);
+
 UIController.displayItemsList(budget.allItems);
 
 const setupEventListeners = () => {

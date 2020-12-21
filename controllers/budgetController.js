@@ -1,3 +1,6 @@
+//  budgetController contains all calculation logic in this app
+//  also it recalculating data after adding and deleting expense and income items
+
 class Expense {
     constructor(id, description, value) {
         this.id = id;
@@ -26,7 +29,7 @@ const calculateTotal = (budget, type) => {
 const addItem = (budget, type, des, val) => {
     let ID;
 
-    // Create new ID
+    // Create new ID for the item
     if (budget.allItems[type].length > 0) {
         ID = budget.allItems[type][budget.allItems[type].length - 1].id + 1;
     } else {
@@ -40,7 +43,6 @@ const addItem = (budget, type, des, val) => {
 };
 
 const calculateBudget = (budget) => {
-
     // calculate total income and expenses
     calculateTotal(budget, 'exp');
     calculateTotal(budget, 'inc');
@@ -54,7 +56,6 @@ const calculateBudget = (budget) => {
     } else {
         budget.percentage = -1;
     }
-    // Expense = 100 and income 300, spent 33.333% = 100/300 = 0.3333 * 100
     return budget;
 };
 
@@ -97,7 +98,7 @@ const budgetController = {
 
         let { newItem, budget } = addItem(initialBudget, type, description, value);
 
-        // 3. Calculate and update budget
+        // Calculate and update budget
         budget = calculateBudget(budget);
 
         return { newItem, ...calculatePercentages(budget) };
@@ -109,10 +110,10 @@ const budgetController = {
 
         let budget = deleteItem(initialBudget, type, id);
 
-        // 2. Calculate and update budget
+        // Calculate and update budget
         budget = calculateBudget(budget);
 
-        return {...calculatePercentages(budget)};
+        return { ...calculatePercentages(budget) };
     },
 
     getInitialBudget: () => {

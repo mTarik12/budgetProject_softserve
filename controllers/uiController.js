@@ -1,3 +1,5 @@
+// uiConctroller do all the things with UI
+
 const DOMstrings = {
     inputType: '.add__type',
     inputDescription: '.add__description',
@@ -13,7 +15,6 @@ const DOMstrings = {
     expensesPercLabel: '.item__percentage',
     dateLabel: '.budget__title--month'
 };
-
 
 const formatNumber = (num, type) => {
 
@@ -32,7 +33,6 @@ const numberWithSpaces = (x) => {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     return parts.join(".");
 }
-
 
 const nodeListForEach = (list, callback) => {
 
@@ -55,6 +55,7 @@ const addListItem = (obj, type) => {
 
         html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">%percentage%%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
 
+        // if the percentage of expense is too low, it will be <1% (for not to see 0%)
         obj.percentage < 1 && (obj.percentage = '<1')
     }
 
@@ -69,17 +70,15 @@ const addListItem = (obj, type) => {
 };
 
 // UI CONTROLLER
-
 const UIController = {
 
     getInput: () => {
         return {
-            type: document.querySelector(DOMstrings.inputType).value, // Will be either inc or exp
+            type: document.querySelector(DOMstrings.inputType).value, // will be either inc or exp
             description: document.querySelector(DOMstrings.inputDescription).value,
             value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
         };
     },
-
 
     addListItem,
 
@@ -94,9 +93,7 @@ const UIController = {
         });
     },
 
-
     deleteListItem: (selectorID) => {
-
         const el = document.getElementById(selectorID);
         el.parentNode.removeChild(el);
     },
@@ -112,7 +109,6 @@ const UIController = {
 
         fieldsArr[0].focus();
     },
-
 
     displayBudget: (budget) => {
         let type;
@@ -142,7 +138,6 @@ const UIController = {
     },
 
     changedType: () => {
-
         const fields = document.querySelectorAll(`${DOMstrings.inputType}, ${DOMstrings.inputDescription}, ${DOMstrings.inputValue}`);
 
         nodeListForEach(fields, (cur) => {
@@ -150,7 +145,6 @@ const UIController = {
         });
 
         document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
-
     },
 
     getDOMstrings: () => {
