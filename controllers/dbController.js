@@ -1,4 +1,4 @@
-// dbController is database of budget application
+// dbController is a service that implements database interface
 
 const dbController = {
     getBudget: function () {
