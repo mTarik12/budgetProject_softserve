@@ -1,12 +1,34 @@
-"# budgetProject_softserve"
+# budgetProject_softserve
 
-To use this app, please download the code and start with launching index.html
+To use this app, please download the code and start with launching **index.html**
 
--------------outro--------------
+#### -------------outro--------------
 
-1. Put budget app on the server;
-2. Connect to the DB;
-3. Rewrite using React.js;
-4. Adapt for mobile version using React Native;
-5. Put budget app on the docker with all its environment;
-6. Unit tests;
+If I had more time I would:
+
+- Put budget app on the server
+- Connect to the DB
+- Rewrite using React.js
+- Adapt for mobile version using React Native
+- Put budget app on the docker with all its environment
+- Unit tests
+- Enhance look&feel of the app
+
+If you feel you have the time, you can also add some info graphics to describe expenses from all of the incomes.
+Or some timetable to see how much money does someone spent/earns per day.
+
+**Make sure to write down what you would have done if you had more time, and submit it together with the rest of the application.**
+
+## Images
+
+If you will find better back-image for this budget app, use it and save with the rest of the application.
+
+## Server
+
+To see how can it work on the server:
+
+### 'npm install -g http-server'
+
+And run it:
+
+### 'http server -c-1'
