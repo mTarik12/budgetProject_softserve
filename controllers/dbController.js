@@ -1,4 +1,4 @@
-// dbController is a service that implements database interface
+// dbController is a service that implements database interface 
 
 const dbController = {
     getBudget: function () {
