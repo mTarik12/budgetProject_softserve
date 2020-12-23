@@ -12,7 +12,7 @@ const dbController = {
     }
   },
   saveBudget: (budget) => {
-    budget.grossTotal < 0 && alert("Watch out!!! You have minus savings!");
+    budget.grossTotal < 0 && alert("Watch out!!! You have minus budget!");
 
     localStorage.setItem(BUDGET_LOCAL_STORAGE_KEY, JSON.stringify(budget));
   },
