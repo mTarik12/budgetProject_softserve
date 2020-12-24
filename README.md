@@ -13,6 +13,7 @@ If I had more time I would:
 - Wrap server in docker container
 - Unit tests
 - Enhance look&feel of the app
+- localize app
 
 If you feel you have the time, you can also add some info graphics to describe expenses from all of the incomes.
 Or some timetable to see how much money does someone spent/earns per day.
